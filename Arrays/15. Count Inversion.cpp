@@ -30,9 +30,9 @@ int merge(vector<int> arr, vector<int> temp, int left, int mid, int right)
         int i, j, k;
         int inv_count = 0;
 
-        i = left; /* i is index for left subarray*/
-        j = mid;  /* j is index for right subarray*/
-        k = left; /* k is index for resultant merged subarray*/
+        i = left; 
+        j = mid;  
+        k = left; 
         while ((i <= mid - 1) && (j <= right))
         {
                 if (arr[i] <= arr[j])
