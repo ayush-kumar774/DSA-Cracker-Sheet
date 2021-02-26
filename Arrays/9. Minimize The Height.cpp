@@ -1,59 +1,84 @@
 #include <bits/stdc++.h>
-using namespace std ;
+using namespace std;
 #define int long long
 
-class Solution{   
+class Solution {
 public:
-    int getMinDiff(int arr[], int n, int k) {
-        if (n == 1) return 0 ; 
-        sort( arr , arr + n ) ;
 
-        int ans = arr[n - 1] - arr[0] ;
-        
-        int small = arr[0] + k ;
-        int big   = arr[n - 1] - k ;
+        int getMinDifference(int arr[], int n, int k) {
+                vector<pair<int, int>> v;
+                vector<int> taken(n);
 
-        if (small > big) 
-                swap(small , big) ;
+                for (int i = 0; i < n; i++) 
+                {
+                        if (arr[i] - k >= 0) {
+                                v.push_back({arr[i] - k, i});
+                        }
+                        v.push_back({arr[i] + k, i});
+                }
+                sort(v.begin(), v.end());
+                int elements_in_range = 0;
+                int left = 0;
+                int right = 0;
 
-        for (int i = 1 ; i < n - 1 ; i++)
-        {
-                int sub = arr[i] - k ;
-                int add = arr[i] + k ;
+                while (elements_in_range < n && right < v.size()) 
+                {
+                        if (taken[v[right].second] == 0) 
+                        {
+                                elements_in_range++;
+                        }
+                        taken[v[right].second]++;
+                        right++;
+                }
 
-                if (sub >= small || add <= big)
-                        continue ;
+                int ans = v[right - 1].first - v[left].first;
+                while (right < v.size()) 
+                {
+                        if (taken[v[left].second] == 1) 
+                        {
+                                elements_in_range--;
+                        }
+                        taken[v[left].second]--;
+                        left++;
 
-                if (big - sub <= add - small)
-                        small = sub ;
+                        while (elements_in_range < n && right < v.size()) 
+                        {
+                                if (taken[v[right].second] == 0) 
+                                {
+                                        elements_in_range++;
+                                }
+                                taken[v[right].second]++;
+                                right++;
+                        }
 
-                else 
-                        big = add ;
-
+                        if (elements_in_range == n) 
+                        {
+                                ans = min(ans, v[right - 1].first - v[left].first);
+                        }
+                        else 
+                        {
+                                break;
+                        }
+                }
+                return ans;
         }
-        return (min(ans, big - small)) ;
-    }
 };
 
-int32_t main()
-{
-        int testcases = 1 ;
-        cin >> testcases ;
-        while (testcases--)
-        {
-                int n, k ;
-                cin >> k ;
-                cin >> n ;
-                int arr[n] ;
-                for (int i = 0; i < n; i++)
-                {
-                        cin >> arr[i] ;
+int32_t main() {
+        int testcases = 1;
+        cin >> testcases;
+        while (testcases--) {
+                int n, k;
+                cin >> k;
+                cin >> n;
+                int arr[n];
+                for (int i = 0; i < n; i++) {
+                        cin >> arr[i];
                 }
-                
-                Solution obj ;
-                auto ans =  obj.getMinDiff(arr, n, k) ;
-                cout << ans << endl ;
+
+                Solution obj;
+                auto ans = obj.getMinDiff(arr, n, k);
+                cout << ans << endl;
         }
-        
         return 0;
 }
