@@ -8,6 +8,26 @@ public:
         {
                 return first[0] < second[0] ;
         }
+
+        vector<vector<int>> merge2(vector<vector<int>> &intervals)
+        {
+                sort(intervals.begin(), intervals.end(), compareVector) ;
+
+                vector < vector < int > > res ;
+
+                for (vector<int> interval : intervals)
+                {
+                        if (res.size() == 0 || res.back()[1] < interval[0]) {
+                                res.push_back(interval) ;
+                        }
+                        else {
+                                res.back()[1] = max(res.back()[1], interval[1]) ;
+                        }
+                }
+
+                return res ;
+        }
+
         vector<vector<int>> merge(vector<vector<int>> &intervals)
         {
                 sort(intervals.begin() , intervals.end(), compareVector) ;
@@ -37,8 +57,8 @@ public:
 
 int main()
 {
-        int row, column ;
-        cin >> row >> column ;
+        int row, column = 2 ;
+        cin >> row ;
         vector < vector <int> > intervals(row, vector<int> (column, 0)) , answer ;
         for (int i = 0 ; i < row ; i++)
         {
@@ -48,7 +68,7 @@ int main()
                 }
         }
         Solution sol ;
-        answer = sol.merge(intervals) ;
+        answer = sol.merge2(intervals) ;
         for (int i = 0 ; i < answer.size() ; i++)
         {
                 for (int j = 0 ; j < answer[i].size() ; j++)
